@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+      
+    <head th:replace="fragments/layout :: head(title='Omat tiedot')" lang="en">
+        <meta charset="UTF-8" />
+        <title>Otsikko</title>
+    </head>
+    <body>
+        <header th:replace="fragments/layout :: header"></header>
+        
+        <div class="container">
+            <div class="row">
+                <h1>Omat tiedot</h1>
+            </div>
+            <div class="row">
+                Tässä voit muokata omia tietoja. Mikäli kenttä jätetään tyhjäksi, jää nykyinen määritys voimaan.
+            </div>
+            <div class="row">
+                <form method="POST" th:action="@{/tiedot}">
+                    <label for="fullName">Koko nimi:</label>
+                    <input type="text" name="fullName"/>
+                    <label for="alias">Nimimerkki:</label>
+                    <input type="text" name="alias"/>
+                    <label for="password">Vaihda salasana:</label>
+                    <input type="password" name="password"/>
+                    <input type="submit" value="Update!"/>
+                </form>
+            </div>
+        </div>
+        
+        
+        <div class="container">
+            <div class="row">
+                <h2>Sinä seuraat</h2>
+            </div>
+            <div class="row">
+                <div class="col-3">Käyttäjän nimi</div>
+                <div class="col-2">Nimimerkki</div>
+                <div class="col-3">Seurauksen aloitus</div>
+                <div class="col-1"></div>
+            </div>
+            <div th:each="seurattu : ${seuratut}">
+                <div class="row">
+                    <div class="col-3"> <a th:href="@{/feed/{id}(id=${seurattu.followed.id})}"><div th:text="${seurattu.followed.fullName}">fullName</div></a></div>
+                    <div class="col-2"><div th:text="${seurattu.followed.alias}"></div></div>
+                    <div class="col-3" th:text="${#temporals.format(seurattu.timestamp, 'dd-MM-yyyy HH:mm')}"/>
+                    <div class="col-1">
+                        <form method="POST" th:action="@{/feed/unfollow}">
+                            <input type="hidden" name="id" th:value="${seurattu.id}"/>
+                            <input type="submit" value="DEL"/>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        
+        <div class="container">
+            <div class="row">
+                <h2>Sinun seuraajat</h2>
+            </div>
+            <div class="row">
+                <div class="col-3">Käyttäjän nimi</div>
+                <div class="col-2">Nimimerkki</div>
+                <div class="col-3">Seurauksen aloitus</div>
+            </div>
+            <div th:each="seuraaja : ${seuraajat}">
+                <div class="row">
+                    <div class="col-3"> <a th:href="@{/feed/{id}(id=${seuraaja.account.id})}"><div th:text="${seuraaja.account.fullName}">fullName</div></a></div>
+                    <div class="col-2"><div th:text="${seuraaja.account.alias}"></div></div>
+                    <div class="col-3" th:text="${#temporals.format(seuraaja.timestamp, 'dd-MM-yyyy HH:mm')}"/>
+                    <div class="col-1">
+                        <form method="POST" th:action="@{/feed/unfollow}">
+                            <input type="hidden" name="id" th:value="${seuraaja.id}"/>
+                            <input type="submit" value="DEL"/>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    </body>
+
+</html>

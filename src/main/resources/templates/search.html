@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <head th:replace="fragments/layout :: head(title='Search')" lang="en">
+        <meta charset="UTF-8" />
+        <title>Otsikko</title>
+    </head>
+    <body>      
+        <header th:replace="fragments/layout :: header">menu </header>
+        
+        <div class="container">
+            <h1>Haun tulokset</h1>
+        </div>
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-3">Käyttäjän nimi</div>
+                <div class="col-2">Nimimerkki</div>
+            </div>
+            <div th:each="user : ${users}" class="row">
+                <div class="col-3"> <a th:href="@{/feed/{id}(id=${user.id})}"><div th:text="${user.fullName}">fullName</div></a></div>
+                <div class="col-2"><div th:text="${user.alias}"</div></div>
+            </div>
+        </div>
+        
+    </body>
+</html>
+

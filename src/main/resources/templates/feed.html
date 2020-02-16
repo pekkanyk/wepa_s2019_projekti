@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <head th:replace="fragments/layout :: head(title='Feed')" lang="en">
+        <meta charset="UTF-8" />
+        <title>Otsikko</title>
+    </head>
+    <body>
+        <header th:replace="fragments/layout :: header">
+            <p>menu</p>
+        </header>
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-4">
+                    <div th:switch="${account.profilePicture}">
+                        <img th:case="null" th:src="@{/nopic.jpg}" style="width:300px; height:300px; border-radius: 50%"/>
+                        <img th:case="*" th:src="@{/pictures/{id}/content(id=${account.profilePicture})}" style="width:300px; height:300px; border-radius: 50%"/>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <h1><span class="row" th:text="${account.fullName}">name</span></h1>
+                    <span class="row">@<span th:text="${account.alias}"></span></span>
+                    
+                    <div class="row">
+                        <a th:href="@{/gallery/{id}(id=${account.id})}">Kättäjän kuvagalleria</a>
+                    </div>
+                    
+                    <div th:if="${seurattu==true}">
+            <div class="row">
+                <form method="POST" th:action="@{/feed/follow}">
+                    <input type="hidden" name="id" th:value="${account.id}"/>
+                    <input type="submit" value="Seuraa"/>
+                </form>
+            </div>
+        </div>
+                    
+                </div>
+            </div>
+            
+        
+            
+        
+        </div>
+        
+        <div th:each="post : ${posts}">
+            <div class="container kehys">
+            <div th:replace="fragments/layout :: post">POST</div>
+            <div class="row">
+                        <div class="col-2">
+                            Tykkää viestistä
+                        </div>
+                        <div th:if="1==1" class="col-2">
+                        <form  method="GET" th:action="@{/post/{id}/like(id=${post.id})}">
+                        <input type="submit" value="+1" />
+                        </form></div>
+            </div>
+        </div>
+        
+    </body>
+</html>
+

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <head lang="en">
+        <meta charset="UTF-8" />
+        <title>Tilit</title>
+    </head>
+    <body>
+        <div sec:authorize="hasAuthority('ADMIN')">
+        <h2>Olemassaolevat tilit</h2>
+        <h3>Roolit:</h3>
+        <ul>
+            <li>USER - Normaali käyttäjä, voi lisätä / poistaa viestejä omassa feedissä ja kommentoida toisten julkaisuja.</li>
+            <li>ADMIN - Pääkäyttäjä. Voi poistaa myös toisten käyttäjien kommentteja sekä julkaisuja. Voi poistaa tilejä sekä antaa tileille lisäoikeuksia.</li>
+        </ul>
+
+        <table>
+            <tr>
+                <td>Käyttäjänimi</td>
+                <td>Roolit</td>
+                <td>Koko nimi</td>
+                <td></td>
+            </tr>
+            <tr th:each="account : ${accounts}">
+                <td th:text="${account.username}">username</td>
+                <td th:text="${account.authorities}">roles</td>
+                <td th:text="${account.fullName}">-</td>
+                <td><form method="POST" th:action="@{/manageAccounts/{id}/addRole(id=${account.id})}" id="add">
+                        <input type="hidden" name="role" value="ADMIN"/>
+                        <input type="submit" value="Add admin"/>
+                    </form>
+                </td>
+                <td><form method="POST" th:action="@{/manageAccounts/{id}/remRole(id=${account.id})}" id="remove">
+                        <input type="hidden" name="role" value="ADMIN"/>
+                        <input type="submit" value="Rem admin"/>
+                    </form>
+                </td>
+            </tr>
+         </table>
+        </div>
+        
+        <h1>Luo uusi tili</h1>
+        
+        <form method="POST" th:action="@{/accounts}" id="create">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username"/>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password"/>
+            <input type="submit" value="Add new account!"/>
+        </form>
+        <a href="/">Takaisin</a>
+    </body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <head th:replace="fragments/layout :: head(title='Picture')" lang="en">
+        <meta charset="UTF-8" />
+        <title>Otsikko</title>
+    </head>
+    <body>
+        <header th:replace="fragments/layout :: header">menu</header>
+        
+        <div class="container" style="padding-top: 20px">
+            <div class="row"><img th:src="@{/pictures/{id}/content(id=${picture.id})}" style="width:800px"/></div>
+            <div class="row">
+                <a th:href="@{/feed/{id}(id=${picture.account.id})}"><div th:text="${picture.account.fullName}">kuka</div></a>
+            </div>
+            <div class="row">
+                 <div th:text="${picture.text}">viesti</div>
+            </div>
+            <div class="row">
+                Tykkäykset: <div th:text="${likes}"</div>
+            </div>
+            
+        </div>
+        
+        
+        
+        <div th:each="comment : ${comments}">
+            <div th:replace="fragments/layout :: comment">POST</div>
+        </div>
+        
+        <div class="container kommentti">
+        <form method="POST" th:action="@{/pictures/{id}/comment(id=${picture.id})}">
+            <label for="comment">Kirjoita kommentti: </label>
+            <input type="text" name="comment"/>
+            <input type="submit" value="Kommentoi!"/>
+        </form>
+        </div>
+        
+    </body>
+</html>
+

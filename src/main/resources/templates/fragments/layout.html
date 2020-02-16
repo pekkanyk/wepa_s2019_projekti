@@ -1,0 +1,76 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="head(title)" lang="en">
+        <meta charset="UTF-8" />
+        <title th:text="${title}">Layout</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+        <link rel="stylesheet" th:href="@{/style.css}"/>
+    </head>
+    
+    <body>
+        <header th:fragment="header">
+            <nav class="container mainmenu">
+                <div class="row">
+                <div class="col-2"><a th:href="@{/}">Etusivu</a></div>
+                <div class="col-2"><a th:href="@{/tiedot}">Omat tiedot</a></div>
+                <div class="col-2"><a th:href="@{/gallery}">Oma kuvagalleria</a></div>
+                <div class="col-2"><a th:href="@{/logout}">Log out</a></div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                    <form method="POST" th:action="@{/search}">
+                    <label for="post">Hae käyttäjä: </label>
+                    <input type="text" name="haku"/>
+                    <input type="submit" value="Hae"/>
+                    </form>
+                </div>
+                </div>
+                <div class="row">
+                    <div clasS="col-6">
+                    <form method="POST" th:action="@{/feed/post}">
+                     <label for="post">Kirjoita viesti: </label>
+                     <input type="text" name="post"/>
+                     <input type="submit" value="POST!"/>
+                    </form>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+        <div th:fragment="comment">
+        <div class="container kommentti">
+            <div class="row">
+                <div class="col-2"> 
+                    <a th:href="@{/feed/{id}(id=${comment.account.id})}"><div th:text="${comment.account.fullName}"> kuka</div></a>
+                </div>
+                <div class="col-4" th:text="${#temporals.format(comment.aikaleima, 'dd-MM-yyyy HH:mm')}"/>
+            </div>
+            <div class="row">
+                <div class="col-12" th:text="${comment.comment}"/>
+            </div>
+                
+            </div>
+        </div>
+            
+            <div th:fragment="post">
+            
+            <div class="container viesti">
+                <div class="row">
+                    <div class="col-2"> 
+                    <a th:href="@{/feed/{id}(id=${post.account.id})}"><div th:text="${post.account.fullName}"> kuka</div></a>
+                    </div>
+                    <div class="col-4" th:text="${#temporals.format(post.aikaleima, 'dd-MM-yyyy HH:mm')}"/>
+                </div>
+                <div class="row">
+                    <div class="col-12"> <a th:href="@{/post/{id}(id=${post.id})}"><div th:text="${post.post}">viesti</div></a></div>
+                    
+                </div>
+            </div>
+            
+            </div>
+            
+                          
+                
+    </body>
+</html>

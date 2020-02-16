@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <head th:replace="fragments/layout :: head(title='Post')" lang="en">
+        <meta charset="UTF-8" />
+        <title>Otsikko</title>
+    </head>
+    <body>      
+        <header th:replace="fragments/layout :: header">menu</header>
+        
+        <div class="container kehys">
+        <div th:replace="fragments/layout :: post">POST</div>
+        <div class="row">
+            Tykkäykset :<div th:text="${likes}">0</div>
+        </div>
+        </div>
+        
+        <div th:each="comment : ${comments}">
+            <div th:replace="fragments/layout :: comment">POST</div>
+        </div>
+        
+        <div class="container kommentti">
+        <form method="POST" th:action="@{/post/{id}/comment(id=${post.id})}">
+            <label for="comment">Kirjoita kommentti: </label>
+            <input type="text" name="comment"/>
+            <input type="submit" value="Kommentoi!"/>
+        </form>
+        </div>
+        
+    </body>
+</html>
+

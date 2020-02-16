@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <head th:fragment="head(title)" lang="en">
+        <meta charset="UTF-8" />
+        <title th:text="${title}">Layout</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+        <link rel="stylesheet" th:href="@{/style.css}"/>
+        <style>
+            img {
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                padding: 5px;
+                width: 100%;
+                height: auto;
+                }
+
+            img:hover {
+                box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+                }
+        </style>
+    </head>
+    <body>
+        <header th:replace="fragments/layout :: header">menu</header>
+        <div class="container">
+            <div class="row">
+                <h1>Käyttäjän <span th:text="${account.fullName}">name</span> kuvagalleria</h1>
+            </div>
+            <div th:if="${oma==true}">
+            <div class="row">
+                Lisää uusi kuva kuvagalleriaan. Käyttäjällä voi olla maksimissaan 10 kuvaa galleriassa.
+            </div>
+            <div class="row">
+                <form method="POST" action="/pictures" enctype="multipart/form-data">
+                    <input type="file" name="picture" id="picture"/>
+                    <label for="text">Kuvateksti: </label>
+                    <input type="text" name="text"/>
+                    <input type="submit" value="Lisää kuva!"/>
+                </form>
+                </div>
+            </div>  
+        </div>
+        
+        <div class="container">
+            <div class="row">
+            <div th:each="picture : ${pictures}" class="col-6">
+                <a th:href="@{/pictures/{id}(id=${picture.id})}">
+                 <img th:src="@{/pictures/{id}/content(id=${picture.id})}" width="300"/></a>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            Tykkää kuvasta
+                        </div>
+                        <div th:if="1==1" class="col">
+                        <form  method="GET" th:action="@{/pictures/{id}/like(id=${picture.id})}">
+                        <input type="submit" value="+1" />
+                        </form></div>
+                        
+                        
+                    </div>
+                    
+                </div>
+                
+                
+                <div th:if="${oma==true}" class="container">
+                    <div class="row">
+                        <div class="col">
+                        <form  method="GET" th:action="@{/pictures/{id}/delete(id=${picture.id})}">
+                        <input type="submit" value="Poista" />
+                        </form></div>
+                        
+                        <div class="col">
+                        <form th:if="${account.profilePicture!=picture.id}" method="POST" th:action="@{/tiedot/setprofilepicture}">
+                        <input type="hidden" name="picId" th:value="${picture.id}"/>
+                        <input type="submit" value="Aseta profiilikuvaksi" />
+                        </form></div>
+                    </div>
+                    
+                </div>
+                
+                <div th:text="${picture.text}" style="padding-bottom:20px">kuvan teksti</div>
+            </div>
+            </div>
+        </div>
+        
+       <script th:inline="javascript"> var contextRoot = /*[[@{/}]]*/ '';</script>
+        <script th:src="@{/javascript/likes.js}" defer></script>        
+    </body>
+</html>
+
